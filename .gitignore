@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+env/
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
+
+# Local env
+.env
+
+# Keep sample cache in the repo for the demo. If you switch to large real
+# pipeline output, uncomment the next line and regenerate locally instead.
+# data/cache/

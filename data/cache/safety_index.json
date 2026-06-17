@@ -1,0 +1,102 @@
+{
+  "M": {
+    "safety_score": 0.0,
+    "safety_norm": 0
+  },
+  "Y": {
+    "safety_score": 0.86,
+    "safety_norm": 86
+  },
+  "L": {
+    "safety_score": 0.75,
+    "safety_norm": 75
+  },
+  "V": {
+    "safety_score": 0.53,
+    "safety_norm": 53
+  },
+  "B": {
+    "safety_score": 0.61,
+    "safety_norm": 61
+  },
+  "Z": {
+    "safety_score": 0.83,
+    "safety_norm": 83
+  },
+  "X": {
+    "safety_score": 0.8,
+    "safety_norm": 80
+  },
+  "T": {
+    "safety_score": 0.7,
+    "safety_norm": 71
+  },
+  "K": {
+    "safety_score": 0.87,
+    "safety_norm": 87
+  },
+  "C": {
+    "safety_score": 0.92,
+    "safety_norm": 92
+  },
+  "S": {
+    "safety_score": 0.9,
+    "safety_norm": 90
+  },
+  "R": {
+    "safety_score": 0.83,
+    "safety_norm": 83
+  },
+  "J": {
+    "safety_score": 0.87,
+    "safety_norm": 87
+  },
+  "G": {
+    "safety_score": 0.89,
+    "safety_norm": 90
+  },
+  "N": {
+    "safety_score": 0.79,
+    "safety_norm": 79
+  },
+  "D": {
+    "safety_score": 0.87,
+    "safety_norm": 88
+  },
+  "E": {
+    "safety_score": 0.35,
+    "safety_norm": 35
+  },
+  "H": {
+    "safety_score": 0.83,
+    "safety_norm": 84
+  },
+  "P": {
+    "safety_score": 0.89,
+    "safety_norm": 89
+  },
+  "A": {
+    "safety_score": 0.97,
+    "safety_norm": 97
+  },
+  "I": {
+    "safety_score": 0.8,
+    "safety_norm": 80
+  },
+  "Q": {
+    "safety_score": 1.0,
+    "safety_norm": 100
+  },
+  "F": {
+    "safety_score": 0.79,
+    "safety_norm": 80
+  },
+  "O": {
+    "safety_score": 0.88,
+    "safety_norm": 88
+  },
+  "W": {
+    "safety_score": 0.88,
+    "safety_norm": 88
+  }
+}

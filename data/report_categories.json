@@ -1,0 +1,39 @@
+{
+  "_note": "groups = broad categories (the first dropdown), each tied to one index metric. categories = the specific issues within each group. Every report maps to index_metric so it feeds that score's perception-gap.",
+  "groups": [
+    { "dimension": "Pedestrian infrastructure", "index_metric": "walk_score",     "icon": "🚶", "color": "#c2683c" },
+    { "dimension": "Safety",                     "index_metric": "safety",         "icon": "⚠️", "color": "#9e3b2e" },
+    { "dimension": "Transit access",             "index_metric": "transit_score",  "icon": "🚌", "color": "#2e8b73" },
+    { "dimension": "Heat & shade",               "index_metric": "heat_risk",      "icon": "☀️", "color": "#d99a2b" },
+    { "dimension": "Flooding & stormwater",      "index_metric": "flood_risk",     "icon": "💧", "color": "#4f86a0" },
+    { "dimension": "Green space",                "index_metric": "green_access",   "icon": "🌳", "color": "#6e8b3d" }
+  ],
+  "categories": [
+    { "id": "needs_crosswalk",     "label": "Needs a crosswalk",                "dimension": "Pedestrian infrastructure", "index_metric": "walk_score",    "icon": "🚸" },
+    { "id": "no_sidewalk",         "label": "No sidewalk here",                 "dimension": "Pedestrian infrastructure", "index_metric": "walk_score",    "icon": "🚷" },
+    { "id": "broken_sidewalk",     "label": "Broken / uneven sidewalk",         "dimension": "Pedestrian infrastructure", "index_metric": "walk_score",    "icon": "🧱" },
+    { "id": "sidewalk_blocked",    "label": "Sidewalk blocked / too narrow",    "dimension": "Pedestrian infrastructure", "index_metric": "walk_score",    "icon": "🚧" },
+    { "id": "no_curb_ramp",        "label": "No curb ramp (not accessible)",    "dimension": "Pedestrian infrastructure", "index_metric": "walk_score",    "icon": "♿" },
+    { "id": "needs_ped_signal",    "label": "Needs a crosswalk light",          "dimension": "Safety", "index_metric": "safety", "icon": "🚦" },
+    { "id": "needs_signage",       "label": "Needs signs (stop, yield, ped)",   "dimension": "Safety", "index_metric": "safety", "icon": "🪧" },
+    { "id": "crosswalk_faded",     "label": "Crosswalk markings faded",         "dimension": "Safety", "index_metric": "safety", "icon": "🛑" },
+    { "id": "crossing_too_long",   "label": "Crossing too long / no refuge",    "dimension": "Safety", "index_metric": "safety", "icon": "↔️" },
+    { "id": "speeding_traffic",    "label": "Speeding traffic",                 "dimension": "Safety", "index_metric": "safety", "icon": "🏎️" },
+    { "id": "poor_lighting",       "label": "Poor lighting at night",           "dimension": "Safety", "index_metric": "safety", "icon": "💡" },
+    { "id": "feels_unsafe",        "label": "Feels unsafe to walk",             "dimension": "Safety", "index_metric": "safety", "icon": "⚠️" },
+    { "id": "bus_no_shelter",      "label": "Bus stop has no shelter",          "dimension": "Transit access", "index_metric": "transit_score", "icon": "🚏" },
+    { "id": "lacking_benches",     "label": "Lacking benches / seating",        "dimension": "Transit access", "index_metric": "transit_score", "icon": "🪑" },
+    { "id": "stop_not_accessible", "label": "Bus stop not accessible",          "dimension": "Transit access", "index_metric": "transit_score", "icon": "♿" },
+    { "id": "no_shade",            "label": "No shade / lacking trees",         "dimension": "Heat & shade", "index_metric": "heat_risk", "icon": "🌳" },
+    { "id": "too_hot",             "label": "Too hot to walk",                  "dimension": "Heat & shade", "index_metric": "heat_risk", "icon": "🥵" },
+    { "id": "floods_after_rain",   "label": "Floods after rain",                "dimension": "Flooding & stormwater", "index_metric": "flood_risk", "icon": "🌧️" },
+    { "id": "poor_drainage",       "label": "Standing water / poor drainage",   "dimension": "Flooding & stormwater", "index_metric": "flood_risk", "icon": "💧" },
+    { "id": "blocked_drain",       "label": "Blocked storm drain",              "dimension": "Flooding & stormwater", "index_metric": "flood_risk", "icon": "🕳️" },
+    { "id": "no_green_space",      "label": "No nearby park / green space",     "dimension": "Green space", "index_metric": "green_access", "icon": "🏞️" },
+    { "id": "trash_dumping",       "label": "Trash / illegal dumping",          "dimension": "Green space", "index_metric": "green_access", "icon": "🗑️" },
+    { "id": "other",               "label": "Something else",                   "dimension": "Green space", "index_metric": null, "icon": "❓" }
+  ],
+  "severity": ["low", "medium", "high"],
+  "time_context": ["after_rain", "daytime", "night"],
+  "user_type": ["resident", "rider", "senior", "student", "disability"]
+}

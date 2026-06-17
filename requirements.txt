@@ -1,0 +1,4 @@
+# Real-data pipeline (run locally — pulls OpenStreetMap geometry)
+osmnx>=2.0
+geopandas
+shapely

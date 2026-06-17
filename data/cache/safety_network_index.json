@@ -1,0 +1,227 @@
+{
+  "A": {
+    "safety_score": 97,
+    "safety_norm": 97,
+    "crashes": 57077,
+    "weighted_crime": 32081.0,
+    "km": 434.8,
+    "risk_per_km": 205.1,
+    "segments": 45048
+  },
+  "B": {
+    "safety_score": 66,
+    "safety_norm": 66,
+    "crashes": 506237,
+    "weighted_crime": 969724.0,
+    "km": 795.4,
+    "risk_per_km": 1855.7,
+    "segments": 84182
+  },
+  "C": {
+    "safety_score": 89,
+    "safety_norm": 89,
+    "crashes": 98554,
+    "weighted_crime": 108614.0,
+    "km": 338.2,
+    "risk_per_km": 612.6,
+    "segments": 35183
+  },
+  "D": {
+    "safety_score": 84,
+    "safety_norm": 84,
+    "crashes": 134491,
+    "weighted_crime": 223849.0,
+    "km": 406.9,
+    "risk_per_km": 880.6,
+    "segments": 42556
+  },
+  "E": {
+    "safety_score": 50,
+    "safety_norm": 50,
+    "crashes": 868413,
+    "weighted_crime": 1150227.0,
+    "km": 749.2,
+    "risk_per_km": 2694.3,
+    "segments": 80376
+  },
+  "F": {
+    "safety_score": 79,
+    "safety_norm": 79,
+    "crashes": 269559,
+    "weighted_crime": 380752.0,
+    "km": 554.8,
+    "risk_per_km": 1172.2,
+    "segments": 58070
+  },
+  "G": {
+    "safety_score": 82,
+    "safety_norm": 82,
+    "crashes": 43569,
+    "weighted_crime": 178535.0,
+    "km": 218.1,
+    "risk_per_km": 1018.4,
+    "segments": 22548
+  },
+  "H": {
+    "safety_score": 73,
+    "safety_norm": 73,
+    "crashes": 115330,
+    "weighted_crime": 201966.0,
+    "km": 213.7,
+    "risk_per_km": 1484.9,
+    "segments": 22112
+  },
+  "I": {
+    "safety_score": 77,
+    "safety_norm": 77,
+    "crashes": 120038,
+    "weighted_crime": 312209.0,
+    "km": 348.1,
+    "risk_per_km": 1241.7,
+    "segments": 35835
+  },
+  "J": {
+    "safety_score": 74,
+    "safety_norm": 74,
+    "crashes": 78202,
+    "weighted_crime": 197552.0,
+    "km": 194.5,
+    "risk_per_km": 1417.7,
+    "segments": 20038
+  },
+  "K": {
+    "safety_score": 66,
+    "safety_norm": 66,
+    "crashes": 60787,
+    "weighted_crime": 248670.0,
+    "km": 166.8,
+    "risk_per_km": 1855.1,
+    "segments": 17341
+  },
+  "L": {
+    "safety_score": 45,
+    "safety_norm": 45,
+    "crashes": 110307,
+    "weighted_crime": 435820.0,
+    "km": 183.4,
+    "risk_per_km": 2977.8,
+    "segments": 19500
+  },
+  "M": {
+    "safety_score": 0,
+    "safety_norm": 0,
+    "crashes": 941667,
+    "weighted_crime": 2563152.0,
+    "km": 654.3,
+    "risk_per_km": 5357.0,
+    "segments": 70179
+  },
+  "N": {
+    "safety_score": 76,
+    "safety_norm": 76,
+    "crashes": 197991,
+    "weighted_crime": 348235.0,
+    "km": 416.0,
+    "risk_per_km": 1313.1,
+    "segments": 43751
+  },
+  "O": {
+    "safety_score": 81,
+    "safety_norm": 81,
+    "crashes": 99093,
+    "weighted_crime": 232527.0,
+    "km": 318.5,
+    "risk_per_km": 1041.3,
+    "segments": 33269
+  },
+  "P": {
+    "safety_score": 85,
+    "safety_norm": 85,
+    "crashes": 56430,
+    "weighted_crime": 145747.0,
+    "km": 243.8,
+    "risk_per_km": 829.2,
+    "segments": 25013
+  },
+  "Q": {
+    "safety_score": 100,
+    "safety_norm": 100,
+    "crashes": 664,
+    "weighted_crime": 568.0,
+    "km": 27.9,
+    "risk_per_km": 44.2,
+    "segments": 2836
+  },
+  "R": {
+    "safety_score": 72,
+    "safety_norm": 72,
+    "crashes": 48901,
+    "weighted_crime": 294299.0,
+    "km": 222.5,
+    "risk_per_km": 1542.8,
+    "segments": 23097
+  },
+  "S": {
+    "safety_score": 84,
+    "safety_norm": 84,
+    "crashes": 29808,
+    "weighted_crime": 127433.0,
+    "km": 171.1,
+    "risk_per_km": 919.0,
+    "segments": 17657
+  },
+  "T": {
+    "safety_score": 52,
+    "safety_norm": 52,
+    "crashes": 212774,
+    "weighted_crime": 631086.0,
+    "km": 328.3,
+    "risk_per_km": 2570.6,
+    "segments": 34558
+  },
+  "V": {
+    "safety_score": 45,
+    "safety_norm": 45,
+    "crashes": 336976,
+    "weighted_crime": 953037.0,
+    "km": 437.3,
+    "risk_per_km": 2950.2,
+    "segments": 46119
+  },
+  "W": {
+    "safety_score": 75,
+    "safety_norm": 75,
+    "crashes": 227274,
+    "weighted_crime": 413250.0,
+    "km": 474.2,
+    "risk_per_km": 1350.8,
+    "segments": 49492
+  },
+  "X": {
+    "safety_score": 75,
+    "safety_norm": 75,
+    "crashes": 148167,
+    "weighted_crime": 299145.0,
+    "km": 331.2,
+    "risk_per_km": 1350.7,
+    "segments": 34601
+  },
+  "Y": {
+    "safety_score": 71,
+    "safety_norm": 71,
+    "crashes": 61355,
+    "weighted_crime": 331785.0,
+    "km": 245.5,
+    "risk_per_km": 1601.2,
+    "segments": 25560
+  },
+  "Z": {
+    "safety_score": 82,
+    "safety_norm": 82,
+    "crashes": 89550,
+    "weighted_crime": 333848.0,
+    "km": 427.5,
+    "risk_per_km": 990.3,
+    "segments": 44021
+  }
+}

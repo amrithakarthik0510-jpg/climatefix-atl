@@ -1,0 +1,467 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -84.35113906860352,
+          33.736117701591205
+        ]
+      },
+      "properties": {
+        "id": "a59c8647",
+        "npu": "W",
+        "category": "no_shade",
+        "index_metric": "heat_risk",
+        "severity": "medium",
+        "time_context": "daytime",
+        "user_type": "resident",
+        "text": "i hate i want more shade",
+        "created_at": "2026-06-14T20:18:28"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -84.40362,
+          33.73781
+        ]
+      },
+      "properties": {
+        "id": "b1c2c8bb",
+        "npu": "V",
+        "category": "no_sidewalk",
+        "index_metric": "walk_score",
+        "severity": "high",
+        "time_context": "daytime",
+        "user_type": "resident",
+        "text": "No sidewalk on this stretch \u2014 I have to walk in the road with my kids.",
+        "created_at": "2026-06-15T09:00:00"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -84.39362,
+          33.72881
+        ]
+      },
+      "properties": {
+        "id": "8356f7aa",
+        "npu": "V",
+        "category": "feels_unsafe",
+        "index_metric": "safety",
+        "severity": "high",
+        "time_context": "night",
+        "user_type": "resident",
+        "text": "Feels really unsafe walking here after dark, no one around.",
+        "created_at": "2026-06-14T09:00:00"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -84.39062,
+          33.73581
+        ]
+      },
+      "properties": {
+        "id": "4bb2a58d",
+        "npu": "V",
+        "category": "poor_lighting",
+        "index_metric": "safety",
+        "severity": "medium",
+        "time_context": "night",
+        "user_type": "student",
+        "text": "Streetlights are out, it's pitch black by the station.",
+        "created_at": "2026-06-14T09:00:00"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -84.40062,
+          33.73081
+        ]
+      },
+      "properties": {
+        "id": "dc48cb25",
+        "npu": "V",
+        "category": "bus_no_shelter",
+        "index_metric": "transit_score",
+        "severity": "medium",
+        "time_context": "daytime",
+        "user_type": "rider",
+        "text": "Bus stop has no shelter \u2014 brutal in the heat and rain.",
+        "created_at": "2026-06-13T09:00:00"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -84.39562,
+          33.73981
+        ]
+      },
+      "properties": {
+        "id": "3b51432d",
+        "npu": "V",
+        "category": "needs_crosswalk",
+        "index_metric": "walk_score",
+        "severity": "high",
+        "time_context": "daytime",
+        "user_type": "senior",
+        "text": "No safe place to cross Peachtree here, cars don't stop.",
+        "created_at": "2026-06-12T09:00:00"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -84.39578,
+          33.79816
+        ]
+      },
+      "properties": {
+        "id": "457caf7a",
+        "npu": "E",
+        "category": "floods_after_rain",
+        "index_metric": "flood_risk",
+        "severity": "high",
+        "time_context": "after_rain",
+        "user_type": "resident",
+        "text": "Floods every time it rains, the whole corner is underwater.",
+        "created_at": "2026-06-15T09:00:00"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -84.38678,
+          33.79016
+        ]
+      },
+      "properties": {
+        "id": "0155065d",
+        "npu": "E",
+        "category": "broken_sidewalk",
+        "index_metric": "walk_score",
+        "severity": "medium",
+        "time_context": "daytime",
+        "user_type": "disability",
+        "text": "Sidewalk is cracked and uneven, my wheelchair can't pass.",
+        "created_at": "2026-06-14T09:00:00"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -84.38578,
+          33.79716
+        ]
+      },
+      "properties": {
+        "id": "462f1c0f",
+        "npu": "E",
+        "category": "speeding_traffic",
+        "index_metric": "safety",
+        "severity": "high",
+        "time_context": "daytime",
+        "user_type": "resident",
+        "text": "Cars speed down this road constantly, scary for kids.",
+        "created_at": "2026-06-13T09:00:00"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -84.39378,
+          33.78816
+        ]
+      },
+      "properties": {
+        "id": "24225c25",
+        "npu": "E",
+        "category": "no_shade",
+        "index_metric": "heat_risk",
+        "severity": "medium",
+        "time_context": "daytime",
+        "user_type": "senior",
+        "text": "No trees at all, no shade the entire walk to the store.",
+        "created_at": "2026-06-11T09:00:00"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -84.41867,
+          33.86065
+        ]
+      },
+      "properties": {
+        "id": "4ca9ad47",
+        "npu": "A",
+        "category": "too_hot",
+        "index_metric": "heat_risk",
+        "severity": "medium",
+        "time_context": "daytime",
+        "user_type": "resident",
+        "text": "Too hot to walk midday \u2014 zero shade anywhere.",
+        "created_at": "2026-06-15T09:00:00"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -84.42667,
+          33.85265
+        ]
+      },
+      "properties": {
+        "id": "fa5e0861",
+        "npu": "A",
+        "category": "crosswalk_faded",
+        "index_metric": "safety",
+        "severity": "low",
+        "time_context": "daytime",
+        "user_type": "resident",
+        "text": "The crosswalk paint is completely faded, drivers ignore it.",
+        "created_at": "2026-06-13T09:00:00"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -84.41767,
+          33.85765
+        ]
+      },
+      "properties": {
+        "id": "e25e28d0",
+        "npu": "A",
+        "category": "lacking_benches",
+        "index_metric": "transit_score",
+        "severity": "low",
+        "time_context": "daytime",
+        "user_type": "senior",
+        "text": "Nowhere to sit and rest while waiting for the bus.",
+        "created_at": "2026-06-12T09:00:00"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -84.38709,
+          33.76127
+        ]
+      },
+      "properties": {
+        "id": "107af1b7",
+        "npu": "M",
+        "category": "feels_unsafe",
+        "index_metric": "safety",
+        "severity": "high",
+        "time_context": "night",
+        "user_type": "student",
+        "text": "Underpass feels dangerous at night, would never walk it alone.",
+        "created_at": "2026-06-15T09:00:00"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -84.38009,
+          33.75427
+        ]
+      },
+      "properties": {
+        "id": "905081c9",
+        "npu": "M",
+        "category": "trash_dumping",
+        "index_metric": "green_access",
+        "severity": "medium",
+        "time_context": "daytime",
+        "user_type": "resident",
+        "text": "Constant illegal dumping on this corner, attracts rats.",
+        "created_at": "2026-06-14T09:00:00"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -84.37809,
+          33.76327
+        ]
+      },
+      "properties": {
+        "id": "c9420a94",
+        "npu": "M",
+        "category": "needs_ped_signal",
+        "index_metric": "safety",
+        "severity": "high",
+        "time_context": "daytime",
+        "user_type": "resident",
+        "text": "Crossing here needs a pedestrian light, six lanes of traffic.",
+        "created_at": "2026-06-12T09:00:00"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -84.47511,
+          33.70032
+        ]
+      },
+      "properties": {
+        "id": "017f8a2e",
+        "npu": "R",
+        "category": "no_sidewalk",
+        "index_metric": "walk_score",
+        "severity": "high",
+        "time_context": "daytime",
+        "user_type": "resident",
+        "text": "There is literally no sidewalk in this whole area.",
+        "created_at": "2026-06-15T09:00:00"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -84.46811,
+          33.68932
+        ]
+      },
+      "properties": {
+        "id": "e49c3012",
+        "npu": "R",
+        "category": "poor_drainage",
+        "index_metric": "flood_risk",
+        "severity": "medium",
+        "time_context": "after_rain",
+        "user_type": "resident",
+        "text": "Standing water sits here for days after any rain.",
+        "created_at": "2026-06-13T09:00:00"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -84.46611,
+          33.69732
+        ]
+      },
+      "properties": {
+        "id": "643bfb4b",
+        "npu": "R",
+        "category": "no_shade",
+        "index_metric": "heat_risk",
+        "severity": "high",
+        "time_context": "daytime",
+        "user_type": "senior",
+        "text": "Walking to the bus in summer is miserable, no canopy at all.",
+        "created_at": "2026-06-11T09:00:00"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -84.39946174621583,
+          33.72619570259219
+        ]
+      },
+      "properties": {
+        "id": "15c9f11f",
+        "npu": "V",
+        "category": "other",
+        "index_metric": null,
+        "severity": "medium",
+        "time_context": "daytime",
+        "user_type": "resident",
+        "text": "i hate this place",
+        "created_at": "2026-06-16T15:33:13"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -84.39746618270875,
+          33.73108546418079
+        ]
+      },
+      "properties": {
+        "id": "75d9e83e",
+        "npu": "V",
+        "category": "needs_crosswalk",
+        "index_metric": "walk_score",
+        "severity": "medium",
+        "time_context": "daytime",
+        "user_type": "resident",
+        "text": "This is a dangerous area and needs a crosswalk",
+        "created_at": "2026-06-16T16:47:47"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -84.38924789428711,
+          33.78672701345303
+        ]
+      },
+      "properties": {
+        "id": "98f0f674",
+        "npu": "E",
+        "category": "no_green_space",
+        "index_metric": "green_access",
+        "severity": "medium",
+        "time_context": "daytime",
+        "user_type": "resident",
+        "text": "",
+        "created_at": "2026-06-16T19:06:56"
+      }
+    }
+  ]
+}

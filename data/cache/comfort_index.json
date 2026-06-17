@@ -1,0 +1,102 @@
+{
+  "A": {
+    "canopy_pct": 8,
+    "comfort": 16
+  },
+  "B": {
+    "canopy_pct": 11,
+    "comfort": 36
+  },
+  "C": {
+    "canopy_pct": 13,
+    "comfort": 24
+  },
+  "D": {
+    "canopy_pct": 11,
+    "comfort": 36
+  },
+  "E": {
+    "canopy_pct": 10,
+    "comfort": 37
+  },
+  "F": {
+    "canopy_pct": 17,
+    "comfort": 42
+  },
+  "G": {
+    "canopy_pct": 14,
+    "comfort": 35
+  },
+  "H": {
+    "canopy_pct": 3,
+    "comfort": 6
+  },
+  "I": {
+    "canopy_pct": 15,
+    "comfort": 31
+  },
+  "J": {
+    "canopy_pct": 18,
+    "comfort": 36
+  },
+  "K": {
+    "canopy_pct": 17,
+    "comfort": 39
+  },
+  "L": {
+    "canopy_pct": 10,
+    "comfort": 32
+  },
+  "M": {
+    "canopy_pct": 4,
+    "comfort": 31
+  },
+  "N": {
+    "canopy_pct": 13,
+    "comfort": 35
+  },
+  "O": {
+    "canopy_pct": 12,
+    "comfort": 36
+  },
+  "P": {
+    "canopy_pct": 0,
+    "comfort": 0
+  },
+  "Q": {
+    "canopy_pct": 0,
+    "comfort": 0
+  },
+  "R": {
+    "canopy_pct": 8,
+    "comfort": 18
+  },
+  "S": {
+    "canopy_pct": 12,
+    "comfort": 31
+  },
+  "T": {
+    "canopy_pct": 10,
+    "comfort": 30
+  },
+  "V": {
+    "canopy_pct": 11,
+    "comfort": 32
+  },
+  "W": {
+    "canopy_pct": 14,
+    "comfort": 38
+  },
+  "X": {
+    "canopy_pct": 9,
+    "comfort": 20
+  },
+  "Y": {
+    "canopy_pct": 14,
+    "comfort": 37
+  },
+  "Z": {
+    "canopy_pct": 2,
+    "comfort": 5
+  }
+}

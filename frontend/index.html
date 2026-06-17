@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ClimateFix ATL</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center;
+           font-family: system-ui, -apple-system, sans-serif; color:#1c1c1a; background:#f7f7f5; padding:20px; }
+    .wrap { max-width:620px; width:100%; }
+    h1 { font-size:24px; margin:0 0 4px; }
+    .sub { color:#6b6b66; margin:0 0 26px; font-size:15px; }
+    .cards { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+    @media (max-width:520px) { .cards { grid-template-columns:1fr; } }
+    a.card { display:block; text-decoration:none; color:inherit; background:#fff;
+             border:1px solid #e3e3df; border-radius:14px; padding:22px; transition:border-color .15s; }
+    a.card:hover { border-color:#1d6fae; }
+    .card h2 { font-size:17px; margin:0 0 6px; }
+    .card p { font-size:13px; color:#6b6b66; margin:0; line-height:1.55; }
+    .tag { display:inline-block; font-size:11px; color:#1d6fae; background:#eaf2fb;
+           padding:3px 9px; border-radius:20px; margin-bottom:12px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>ClimateFix ATL</h1>
+    <p class="sub">Resident-reported street problems → climate resilience investment decisions.</p>
+    <div class="cards">
+      <a class="card" href="resident.html">
+        <span class="tag">For residents · phone</span>
+        <h2>Report view</h2>
+        <p>See MARTA access near your neighborhood and report street problems — flooding, no shade, broken sidewalks.</p>
+      </a>
+      <a class="card" href="planner.html">
+        <span class="tag">For city staff · laptop</span>
+        <h2>Planner dashboard</h2>
+        <p>Walkability + climate index by NPU, toggleable layers, transit coverage, and prioritized fixes.</p>
+      </a>
+    </div>
+  </div>
+</body>
+</html>

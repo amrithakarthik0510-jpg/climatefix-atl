@@ -1,0 +1,127 @@
+{
+  "A": {
+    "sidewalk_pct": 31,
+    "roads": 3146,
+    "sidewalk_roads": 693
+  },
+  "B": {
+    "sidewalk_pct": 52,
+    "roads": 9230,
+    "sidewalk_roads": 4606
+  },
+  "C": {
+    "sidewalk_pct": 52,
+    "roads": 2750,
+    "sidewalk_roads": 1327
+  },
+  "D": {
+    "sidewalk_pct": 35,
+    "roads": 3667,
+    "sidewalk_roads": 1302
+  },
+  "E": {
+    "sidewalk_pct": 65,
+    "roads": 10547,
+    "sidewalk_roads": 6655
+  },
+  "F": {
+    "sidewalk_pct": 66,
+    "roads": 5268,
+    "sidewalk_roads": 3143
+  },
+  "G": {
+    "sidewalk_pct": 21,
+    "roads": 1464,
+    "sidewalk_roads": 192
+  },
+  "H": {
+    "sidewalk_pct": 15,
+    "roads": 1498,
+    "sidewalk_roads": 257
+  },
+  "I": {
+    "sidewalk_pct": 12,
+    "roads": 2029,
+    "sidewalk_roads": 196
+  },
+  "J": {
+    "sidewalk_pct": 43,
+    "roads": 1171,
+    "sidewalk_roads": 323
+  },
+  "K": {
+    "sidewalk_pct": 54,
+    "roads": 1298,
+    "sidewalk_roads": 638
+  },
+  "L": {
+    "sidewalk_pct": 74,
+    "roads": 2307,
+    "sidewalk_roads": 1625
+  },
+  "M": {
+    "sidewalk_pct": 67,
+    "roads": 9402,
+    "sidewalk_roads": 6348
+  },
+  "N": {
+    "sidewalk_pct": 77,
+    "roads": 4142,
+    "sidewalk_roads": 3000
+  },
+  "O": {
+    "sidewalk_pct": 68,
+    "roads": 2828,
+    "sidewalk_roads": 1806
+  },
+  "P": {
+    "sidewalk_pct": 4,
+    "roads": 1310,
+    "sidewalk_roads": 80
+  },
+  "Q": {
+    "sidewalk_pct": 0,
+    "roads": 116,
+    "sidewalk_roads": 0
+  },
+  "R": {
+    "sidewalk_pct": 1,
+    "roads": 1736,
+    "sidewalk_roads": 33
+  },
+  "S": {
+    "sidewalk_pct": 18,
+    "roads": 1114,
+    "sidewalk_roads": 264
+  },
+  "T": {
+    "sidewalk_pct": 59,
+    "roads": 3345,
+    "sidewalk_roads": 1743
+  },
+  "V": {
+    "sidewalk_pct": 73,
+    "roads": 4686,
+    "sidewalk_roads": 3443
+  },
+  "W": {
+    "sidewalk_pct": 58,
+    "roads": 4159,
+    "sidewalk_roads": 2367
+  },
+  "X": {
+    "sidewalk_pct": 45,
+    "roads": 2997,
+    "sidewalk_roads": 1317
+  },
+  "Y": {
+    "sidewalk_pct": 57,
+    "roads": 2000,
+    "sidewalk_roads": 1168
+  },
+  "Z": {
+    "sidewalk_pct": 17,
+    "roads": 2593,
+    "sidewalk_roads": 442
+  }
+}

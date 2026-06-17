@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Walk It ATL — Planner dashboard</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
+  <style>
+    :root { --border:#e3e3df; --text:#1c1c1a; --muted:#6b6b66; --accent:#1d6fae; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family: system-ui, -apple-system, sans-serif; color:var(--text); }
+    #app { display:flex; height:100vh; }
+    #sidebar { width:320px; flex:0 0 320px; border-right:1px solid var(--border);
+               background:#f7f7f5; overflow-y:auto; display:flex; flex-direction:column; }
+    .pad { padding:16px 18px; }
+    #map { flex:1; }
+    h1 { font-size:17px; margin:0 0 2px; }
+    .sub { font-size:12px; color:var(--muted); margin:0; }
+    label.fld { display:block; font-size:11px; color:var(--muted); margin:14px 0 5px;
+            text-transform:uppercase; letter-spacing:.04em; }
+    select { width:100%; padding:8px 10px; font-size:14px; border:1px solid var(--border);
+             border-radius:8px; background:#fff; }
+
+    /* big overall headline — clickable = shade map by overall */
+    .headline { margin-top:14px; padding:14px 16px; background:#fff; border:1px solid var(--border);
+                border-radius:12px; cursor:pointer; }
+    .headline.active { border:2px solid var(--accent); background:#eef5fb; padding:13px 15px; }
+    .headline .nm { font-size:12px; color:var(--muted); }
+    .headline .big { font-size:44px; font-weight:700; line-height:1; }
+    .headline .big span { font-size:14px; font-weight:400; color:var(--muted); }
+
+    /* tabs */
+    .tabs { display:flex; border-bottom:1px solid var(--border); margin-top:16px; }
+    .tabs button { flex:1; border:0; background:none; font:inherit; font-size:13px; padding:11px 0;
+                   cursor:pointer; color:var(--muted); border-bottom:2px solid transparent; }
+    .tabs button.on { color:var(--accent); font-weight:600; border-bottom-color:var(--accent); }
+    .panel { display:none; }
+    .panel.on { display:block; }
+
+    /* lens list = score + selector merged */
+    .lens-row { display:flex; align-items:center; gap:9px; padding:9px 10px; margin:5px 0;
+                border:1px solid var(--border); border-radius:9px; background:#fff; cursor:pointer; }
+    .lens-row.active { border:2px solid var(--accent); background:#eef5fb; padding:8px 9px; }
+    .lens-row.soon { opacity:.55; cursor:default; }
+    .lens-row .ic { font-size:17px; width:20px; text-align:center; }
+    .lens-row .lab { flex:1; font-size:13px; }
+    .lens-row .track { width:52px; height:7px; background:#e7e6e0; border-radius:4px; overflow:hidden; }
+    .lens-row .fill { display:block; height:100%; }
+    .lens-row .val { width:22px; font-size:12px; font-weight:600; text-align:right; }
+    .lens-row .val.soon { font-weight:400; font-size:11px; color:var(--muted); width:auto; }
+
+    .seg { display:flex; border:1px solid var(--border); border-radius:8px; overflow:hidden; margin-top:5px; }
+    .seg button { flex:1; border:0; border-left:1px solid var(--border); background:#fff; font:inherit;
+                  font-size:12px; padding:8px 0; cursor:pointer; color:var(--text); }
+    .seg button:first-child { border-left:0; }
+    .seg button.on { background:#eef5fb; font-weight:600; color:var(--accent); }
+    .seg button:disabled { color:#bdbdb7; cursor:not-allowed; background:#faf9f7; }
+
+    .toggle { display:flex; align-items:center; gap:8px; font-size:13px; margin-top:14px; cursor:pointer; }
+    .legend { margin-top:16px; font-size:12px; color:var(--muted); line-height:1.7; padding-top:12px; border-top:1px solid var(--border); }
+    .ramp { display:inline-block; width:90px; height:9px; border-radius:5px; vertical-align:-1px; margin-right:6px;
+            background:linear-gradient(90deg,#1a9850,#fee08b,#d73027); }
+    .hint { font-size:12px; color:var(--muted); line-height:1.5; margin-top:10px; }
+
+    /* recommendations */
+    .rec { border:1px solid var(--border); border-left-width:4px; border-radius:9px; background:#fff;
+           padding:10px 12px; margin-bottom:9px; }
+    .rec .top { display:flex; justify-content:space-between; align-items:baseline; gap:8px; }
+    .rec .ttl { font-size:13px; font-weight:600; }
+    .rec .tag { font-size:10px; font-weight:600; padding:3px 7px; border-radius:12px; white-space:nowrap; }
+    .rec .why { font-size:12px; color:var(--muted); margin-top:4px; line-height:1.5; }
+
+    /* cost table */
+    table.cost { width:100%; border-collapse:collapse; font-size:12px; margin-top:4px; }
+    table.cost th { text-align:left; color:var(--muted); font-weight:500; padding:6px 4px; border-bottom:1px solid var(--border); }
+    table.cost td { padding:6px 4px; border-bottom:1px solid var(--border); }
+    table.cost input { width:54px; padding:3px 5px; border:1px solid var(--border); border-radius:6px; font:inherit; }
+    .total { display:flex; justify-content:space-between; font-size:15px; font-weight:700; margin-top:12px; }
+    .draft { font-size:11px; color:#9a5b00; background:#fbeedd; border-radius:6px; padding:6px 9px; margin-bottom:10px; }
+
+    .stop-emoji { line-height:1; text-align:center; background:none; border:none; }
+    .rail-badge { width:32px; height:32px; border-radius:50%; background:#fff; border:2px solid #0f6e56;
+                  display:flex; align-items:center; justify-content:center; font-size:18px; box-shadow:0 1px 4px rgba(0,0,0,0.3); }
+    .bus-cluster { width:28px; height:28px; border-radius:50%; background:rgba(15,110,86,0.85); color:#fff;
+                   font-size:12px; font-weight:600; display:flex; align-items:center; justify-content:center; border:2px solid #fff; }
+    /* feedback */
+    .fb-sum { background:#fff; border:1px solid var(--border); border-radius:10px; padding:12px 14px; }
+    .fb-sum .big { font-size:15px; font-weight:600; line-height:1.4; }
+    .fb-sum .syn { font-size:13px; color:var(--text); line-height:1.5; margin-top:6px; }
+    .fb-theme { display:flex; align-items:center; gap:8px; margin-top:7px; font-size:12px; }
+    .fb-theme .nm { width:120px; }
+    .fb-theme .track { flex:1; height:8px; background:#e7e6e0; border-radius:4px; overflow:hidden; }
+    .fb-theme .fill { display:block; height:100%; background:#3b6d8c; }
+    .fb-theme .n { width:18px; text-align:right; font-weight:600; }
+    .gapflag { margin-top:10px; font-size:12px; background:#fbeedd; color:#9a5b00; border-radius:6px; padding:7px 9px; line-height:1.45; }
+    .rep { border:1px solid var(--border); border-left-width:4px; border-radius:9px; background:#fff; padding:9px 11px; margin-bottom:8px; }
+    .rep .hd { display:flex; justify-content:space-between; align-items:baseline; gap:8px; }
+    .rep .cat { font-size:13px; font-weight:600; }
+    .rep .sev { font-size:10px; font-weight:600; padding:2px 7px; border-radius:10px; white-space:nowrap; text-transform:uppercase; }
+    .rep .txt { font-size:12px; color:var(--text); margin-top:4px; line-height:1.45; }
+    .rep .meta { font-size:11px; color:var(--muted); margin-top:3px; }
+    .rep-pin { display:flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:50% 50% 50% 0;
+               transform:rotate(-45deg); border:2px solid #fff; box-shadow:0 1px 3px rgba(0,0,0,.35); }
+    .rep-pin span { transform:rotate(45deg); font-size:12px; }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div id="sidebar">
+      <div class="pad">
+        <h1>Walk It <span style="color:#ff2d8e">ATL</span></h1>
+        <p class="sub">Planner dashboard · <a href="resident.html">resident view ↗</a></p>
+
+        <label class="fld" for="area">Neighborhood Planning Unit</label>
+        <select id="area"></select>
+
+        <div class="headline" id="overall-card">
+          <div class="nm">Overall priority · <span id="hl-area">—</span></div>
+          <div class="big" id="hl-score">—<span> /100</span></div>
+        </div>
+
+        <div class="tabs">
+          <button data-tab="map" class="on">Map</button>
+          <button data-tab="feedback">Feedback</button>
+          <button data-tab="plan">Plan &amp; cost</button>
+        </div>
+      </div>
+
+      <div class="pad" style="padding-top:0;">
+        <!-- MAP TAB -->
+        <div class="panel on" id="panel-map">
+          <label class="fld">Map area</label>
+          <div class="seg" id="scope-seg">
+            <button data-scope="one" class="on">This NPU</button>
+            <button data-scope="all">All Atlanta</button>
+          </div>
+
+          <label class="fld">Show one measure</label>
+          <div id="lens-list"></div>
+
+          <div id="detail-wrap">
+            <label class="fld">Zoom level</label>
+            <div class="seg" id="detail-seg"></div>
+            <div id="detail-extra"></div>
+          </div>
+
+          <label class="toggle"><input type="checkbox" id="infraChk" /> Existing infrastructure <span style="color:var(--muted);font-size:11px">· audit points (NPU A &amp; E)</span></label>
+          <select id="infraType" style="width:100%; margin-top:6px; padding:6px 8px; font-size:12px; display:none;">
+            <option value="surface">All points · by surface condition</option>
+            <option value="shade">Tree shade %</option>
+            <option value="bus_shelter">Bus shelters</option>
+            <option value="crosswalk">Marked crosswalks</option>
+            <option value="bench">Benches</option>
+          </select>
+
+          <label class="toggle"><input type="checkbox" id="bikeChk" /> Bike lanes <span style="color:var(--muted);font-size:11px">· cycleways</span></label>
+
+          <div class="legend">
+            <span class="ramp"></span>green = strong → red = needs work. Same scale on every measure.<br>
+            Click any street for all its scores &amp; whether a sidewalk exists.
+          </div>
+          <p class="hint" id="layer-status"></p>
+        </div>
+
+        <!-- FEEDBACK TAB -->
+        <div class="panel" id="panel-feedback">
+          <div id="feedback-summary"></div>
+          <label class="fld" style="margin-top:14px">Resident reports</label>
+          <div id="feedback-list"></div>
+        </div>
+
+        <!-- PLAN & COST TAB (recommendations + costing together) -->
+        <div class="panel" id="panel-plan">
+          <label class="fld">Suggested fixes</label>
+          <div class="draft">Drafted from this NPU's weakest measures and resident reports. Tune with your team.</div>
+          <div id="recs-list"></div>
+
+          <label class="fld" style="margin-top:18px">Cost estimate</label>
+          <div class="draft">Planning-level cost estimates — GDOT Appendix D, FHWA, TCRP, Arbor Day &amp; municipal guides. Ranges shown as midpoints.</div>
+          <div style="display:flex; gap:6px; margin-bottom:10px;">
+            <select id="cost-pick" style="flex:1; padding:7px 8px; font-size:12px;"></select>
+            <button id="cost-add" style="border:1px solid var(--border); background:#fff; border-radius:8px; padding:0 12px; cursor:pointer; font:inherit;">Add</button>
+          </div>
+          <table class="cost"><thead><tr><th>Intervention</th><th>Qty</th><th style="text-align:right">Cost</th><th></th></tr></thead>
+            <tbody id="cost-body"></tbody></table>
+          <div class="total"><span>Package total</span><span id="cost-total">$0</span></div>
+          <p class="hint">Pre-filled from this NPU's priority fixes — add or remove items from the menu. Next: projected score lift + report export.</p>
+        </div>
+      </div>
+    </div>
+    <div id="map"></div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+  <script>
+    const map = L.map('map');
+    const segCanvas = L.canvas({padding:0.5, tolerance:14});
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution:'&copy; OpenStreetMap &copy; CARTO', maxZoom:20 }).addTo(map);
+
+    let boundaries=null, areas=[], currentArea=null, npuLayer=null;
+    let activeLens='overall', activeDetail='npu', busOn=false, activeLayer=null, scope='one', infraLayer=null;
+    const INFRA_NPUS=new Set(['A','E']);  // existing-infrastructure audit available for these only
+
+    function status(m){ document.getElementById('layer-status').textContent=m||''; }
+    function codeOf(a){ return a.name.split(' ').pop(); }
+    function safetyColor(v){ if(v==null)return '#d9d8d2';
+      if(v>=80)return '#1a9850'; if(v>=60)return '#a6d96a'; if(v>=40)return '#fee08b';
+      if(v>=20)return '#fc8d59'; return '#d73027'; }
+
+    // ---- per-NPU scores ----
+    const stat={ walk:{}, transit:{}, safetyW:{}, safetyN:{}, safety:{}, ped:{}, canopy:{}, overall:{} };
+    // canopy values run low (Atlanta street canopy ~0-20%), so use a tuned ramp
+    function canopyColor(v){ if(v==null)return '#d9d8d2';
+      if(v>=18)return '#1a9850'; if(v>=12)return '#a6d96a'; if(v>=8)return '#fee08b';
+      if(v>=4)return '#fc8d59'; return '#d73027'; }
+    let safetyNetData=null;
+    const roadCache={};  // area.id -> road_segments FeatureCollection
+
+    async function loadIndexStats(){
+      await Promise.all(areas.map(async a=>{ try{
+        const d=await(await fetch(`../data/cache/${a.id}/transit.geojson`)).json();
+        if(d.properties&&d.properties.transit_index!=null) stat.transit[codeOf(a)]=d.properties.transit_index;
+      }catch(e){} }));
+      try{ const s=await(await fetch('../data/cache/safety_index.json')).json();
+        for(const n in s) stat.safetyW[n]=s[n].safety_norm; }catch(e){}
+      try{ safetyNetData=await(await fetch('../data/cache/safety_network_index.json')).json();
+        for(const n in safetyNetData) stat.safetyN[n]=safetyNetData[n].safety_norm; }catch(e){}
+      try{ const w=await(await fetch('../data/cache/walkability_index.json')).json();
+        for(const n in w) if(w[n]&&w[n].walk_score!=null) stat.walk[n]=w[n].walk_score; }catch(e){}
+      try{ const p=await(await fetch('../data/cache/pedestrian_index.json')).json();
+        for(const n in p) if(p[n]&&p[n].sidewalk_pct!=null) stat.ped[n]=p[n].sidewalk_pct; }catch(e){}
+      try{ const ci=await(await fetch('../data/cache/comfort_index.json')).json();
+        for(const n in ci) if(ci[n]&&ci[n].canopy_pct!=null) stat.canopy[n]=ci[n].canopy_pct; }catch(e){}
+      boundaries.features.forEach(f=>{
+        const c=f.properties.npu;
+        // combined safety = mean of weighted index + crime/crash network (both 0-100, higher=safer)
+        const sp=[stat.safetyW[c], stat.safetyN[c]].filter(v=>v!=null);
+        if(sp.length) stat.safety[c]=Math.round(sp.reduce((a,b)=>a+b,0)/sp.length);
+        const op=[stat.walk[c], stat.safety[c], stat.transit[c], stat.ped[c], stat.canopy[c]].filter(v=>v!=null);
+        if(op.length) stat.overall[c]=Math.round(op.reduce((a,b)=>a+b,0)/op.length);
+      });
+    }
+
+    // ---- lens config. At SEGMENT level the active lens just picks which field of
+    //      the unified road network colours the streets (overall / safety / sidewalk),
+    //      so switching lens "toggles into the other parts" on the same segments. ----
+    const LENSES=[
+      {id:'walkability',label:'Walkability',icon:'🚶',score:c=>stat.walk[c],tiers:['npu','segment'],
+        npu:()=>choropleth(c=>stat.walk[c],c=>`<b>NPU ${c}</b><br>Walkability: ${stat.walk[c]??'n/a'}/100`),
+        segment:loadSidewalks},
+      {id:'safety',label:'Safety',icon:'🛡',score:c=>stat.safety[c],tiers:['npu','segment'],
+        npu:loadSafetyNPU, segment:a=>loadRoads(a,'safety')},
+      {id:'pedestrian',label:'Sidewalks',icon:'🛣',score:c=>stat.ped[c],tiers:['npu','segment'],
+        npu:()=>choropleth(c=>stat.ped[c],c=>`<b>NPU ${c}</b><br>Sidewalk coverage: ${stat.ped[c]??'n/a'}%`),
+        segment:a=>loadRoads(a,'sidewalk')},
+      {id:'transit',label:'Transit',icon:'🚌',score:c=>stat.transit[c],tiers:['npu','segment'],
+        npu:()=>choropleth(c=>stat.transit[c],c=>`<b>NPU ${c}</b><br>Transit: ${stat.transit[c]??'n/a'}/100`),
+        segment:loadTransitDetail},
+      {id:'treeshade',label:'Thermal comfort',icon:'🌳',score:c=>stat.canopy[c],tiers:['npu','segment'],
+        npu:()=>choropleth(c=>stat.canopy[c],c=>`<b>NPU ${c}</b><br>Thermal comfort: ${stat.canopy[c]??'n/a'}% avg`,canopyColor),
+        segment:a=>loadRoads(a,'canopy')},
+    ];
+    const TIER_LABELS={npu:'Whole NPU',segment:'Streets'};
+
+    // NPU choropleth. scope='one' colours only the selected NPU (others grey outline);
+    // scope='all' colours every NPU and lets you click one to select it.
+    function choropleth(scoreFn,popupFn,colorFn){
+      const cf=colorFn||safetyColor;
+      const sel=currentArea?codeOf(currentArea):null;
+      return L.geoJSON(boundaries,{
+        style:f=>{ const c=f.properties.npu;
+          if(scope==='one' && c!==sel) return {color:'#c9c8c1',weight:1,fill:false,opacity:0.6};
+          const v=scoreFn(c);
+          return {color: c===sel?'#1d6fae':'#fff', weight: c===sel?2.5:1,
+                  fillColor:cf(v), fillOpacity:v==null?0.15:0.6}; },
+        onEachFeature:(f,l)=>{ const c=f.properties.npu;
+          if(scope==='all' || c===sel){
+            l.bindPopup(popupFn(c));
+            if(scope==='all') l.on('click',()=>{ if(c!==sel) selectByCode(c); });
+          } }
+      });
+    }
+    function selectByCode(code){
+      const i=areas.findIndex(a=>codeOf(a)===code);
+      if(i>=0){ document.getElementById('area').value=i; select(areas[i]); }
+    }
+    async function loadOverallNPU(){
+      return choropleth(c=>stat.overall[c],c=>`<b>NPU ${c}</b><br>Overall priority: ${stat.overall[c]??'n/a'}/100`
+        +`<br><small>walk ${stat.walk[c]??'–'} · safety ${stat.safety[c]??'–'} · transit ${stat.transit[c]??'–'} · sidewalk ${stat.ped[c]??'–'}%</small>`);
+    }
+    async function loadSafetyNPU(){
+      return choropleth(c=>stat.safety[c],c=>{ const s=safetyNetData&&safetyNetData[c];
+        return `<b>NPU ${c}</b><br>Safety (combined): ${stat.safety[c]??'n/a'}/100`
+          +`<br><small>weighted ${stat.safetyW[c]??'–'} · crime+crash ${stat.safetyN[c]??'–'}</small>`
+          +(s?`<br>${s.crashes.toLocaleString()} crashes · ${s.risk_per_km}/km`:''); });
+    }
+
+    // ---- unified SEGMENT layer: one road network, coloured by the chosen field.
+    //      Clicking a road reveals its existing infrastructure (sidewalk present). ----
+    const FIELD_LABEL={overall:'overall priority',safety:'safety',sidewalk:'sidewalk presence',canopy:'thermal comfort'};
+    const fieldColor=(field,v)=> field==='canopy'?canopyColor(v):safetyColor(v);
+    async function fetchRoads(area){
+      if(!roadCache[area.id]){ const r=await fetch(`../data/cache/${area.id}/road_segments.geojson`);
+        if(!r.ok) throw new Error('no road segments'); roadCache[area.id]=await r.json(); }
+      return roadCache[area.id];
+    }
+    async function loadRoads(area, field){
+      const data=await fetchRoads(area);
+      const canvas=L.canvas({padding:0.5, tolerance:14});
+      const lyr=L.geoJSON(data,{ renderer:canvas,
+        style:f=>({color:fieldColor(field,f.properties[field]), weight:2.5, opacity:0.85}) });
+      lyr.on('click',e=>{ const p=e.layer.feature.properties;   // all scores + existing infra at once
+        const row=(lab,v,col)=>`<div style="display:flex;justify-content:space-between;gap:14px;margin:2px 0">
+          <span>${lab}</span><b style="color:${col}">${v==null?'n/a':v}<span style="color:#999;font-weight:400">/100</span></b></div>`;
+        L.popup().setLatLng(e.latlng).setContent(
+          `<b>${p.name||p.road_type||'Road segment'}</b>`
+          +`<div style="margin-top:5px;font-size:12px;min-width:170px">`
+          + row('Overall', p.overall, safetyColor(p.overall))
+          + row('Safety', p.safety, safetyColor(p.safety))
+          + row('Sidewalk', p.sidewalk, safetyColor(p.sidewalk))
+          + row('Thermal comfort', p.canopy, canopyColor(p.canopy))
+          +`<div style="display:flex;justify-content:space-between;gap:14px;margin:4px 0 0;border-top:1px solid #eee;padding-top:4px">`
+          +`<span>Existing sidewalk</span><b style="color:${p.sidewalk_present?'#1a7a3a':'#a32d2d'}">${p.sidewalk_present?'Yes ✓':'No ✗'}</b></div>`
+          +`<div style="color:#999;margin-top:3px">type: ${p.road_type||'–'}</div></div>`).openOn(map); });
+      status(`${data.features.length.toLocaleString()} road segments coloured by ${FIELD_LABEL[field]} — click any for all scores & existing infrastructure.`);
+      return lyr;
+    }
+
+    // ---- existing infrastructure: per-point audit overlay (NPU A & E only) ----
+    const infraCanvas=L.canvas({padding:0.5, tolerance:14});
+    const infraCache={};
+    let infraMode='surface';
+    function surfaceColor(s){ s=(s||'').toLowerCase();
+      if(s==='good')return '#1a9850'; if(s==='fair')return '#fee08b'; if(s==='poor')return '#d73027'; return '#888780'; }
+    const INFRA_FILTER={ bus_shelter:p=>p.has_bus_shelter, crosswalk:p=>p.marked_crosswalk_detected, bench:p=>p.benches_count>0 };
+    const INFRA_FIXED={ bus_shelter:'#1d6fae', crosswalk:'#7a4ab0', bench:'#9a5b00' };
+    const INFRA_LABEL={ surface:'by surface condition', shade:'by tree shade %', bus_shelter:'bus shelters',
+                        crosswalk:'marked crosswalks', bench:'benches' };
+    function infraColor(mode,p){ if(mode==='surface')return surfaceColor(p.surface_condition);
+      if(mode==='shade')return safetyColor(p.shade_percentage); return INFRA_FIXED[mode]||'#888780'; }
+    async function loadInfraPoints(area, mode){
+      if(!infraCache[area.id]){ const r=await fetch(`../data/cache/${area.id}/infrastructure.geojson`);
+        if(!r.ok) throw new Error('no infra'); infraCache[area.id]=await r.json(); }
+      const data=infraCache[area.id]; const filt=INFRA_FILTER[mode]; let n=0;
+      const lyr=L.geoJSON(data,{ renderer:infraCanvas,
+        filter:f=> filt?filt(f.properties):true,
+        pointToLayer:(f,ll)=>{ n++; return L.circleMarker(ll,{radius:4,weight:0.5,color:'#fff',
+          fillColor:infraColor(mode,f.properties),fillOpacity:0.85}); } });
+      lyr.on('click',e=>{ const p=e.layer.feature.properties; const yn=b=>b?'<b style="color:#1a7a3a">Yes ✓</b>':'<b style="color:#a32d2d">No ✗</b>';
+        L.popup().setLatLng(e.latlng).setContent(
+          `<b>Sidewalk audit point</b><div style="font-size:12px;margin-top:4px;min-width:170px">`
+          +`Surface: <b style="color:${surfaceColor(p.surface_condition)}">${p.surface_condition}</b><br>`
+          +`Sidewalk width: ${p.estimated_width_ft} ft · Shade: ${p.shade_percentage}%<br>`
+          +`Benches: ${p.benches_count} · Parking: ${p.parking_density}<br>`
+          +`Bus shelter: ${yn(p.has_bus_shelter)}<br>Marked crosswalk: ${yn(p.marked_crosswalk_detected)}<br>`
+          +`<div style="border-top:1px solid #eee;margin-top:4px;padding-top:4px">Safety: <b style="color:${safetyColor(p.base_safety_score)}">${p.base_safety_score}</b> · Walkability: <b style="color:${safetyColor(p.walkability_score_100)}">${Math.round(p.walkability_score_100)}</b></div>`
+          +`<small style="color:#999">${p.img_reference||''}</small></div>`).openOn(map); });
+      status(`Existing infrastructure — ${INFRA_LABEL[mode]}. ${n.toLocaleString()} points shown. Click any for the full audit.`);
+      return lyr;
+    }
+    // ---- bike lanes overlay (cycleways, all NPUs) ----
+    let bikeLayer=null;
+    async function loadBikeLanes(area){
+      const data=await fetchRoads(area);
+      const bikes={type:'FeatureCollection',features:data.features.filter(f=>f.properties.road_type==='cycleway')};
+      const lyr=L.geoJSON(bikes,{renderer:segCanvas,style:{color:'#185fa5',weight:4,opacity:0.9}});
+      lyr.on('click',e=>{ const p=e.layer.feature.properties;
+        L.popup().setLatLng(e.latlng).setContent(`<b>${p.name||'Bike lane'}</b><br>cycleway`
+          +(p.safety!=null?`<br>Safety: ${p.safety}/100`:'')).openOn(map); });
+      status(`${bikes.features.length} bike-lane / cycleway segment${bikes.features.length===1?'':'s'} in ${area.name}.`);
+      return lyr;
+    }
+    function refreshBike(){
+      if(bikeLayer){ bikeLayer.remove(); bikeLayer=null; }
+      if(document.getElementById('bikeChk').checked && currentArea)
+        loadBikeLanes(currentArea).then(l=>{ bikeLayer=l; l.addTo(map); if(npuLayer)npuLayer.bringToFront(); }).catch(()=>{});
+    }
+
+    function refreshInfra(){
+      if(infraLayer){ infraLayer.remove(); infraLayer=null; }
+      const chk=document.getElementById('infraChk'), sel=document.getElementById('infraType');
+      sel.style.display = chk.checked ? 'block' : 'none';
+      if(!chk.checked || !currentArea) return;
+      if(!INFRA_NPUS.has(codeOf(currentArea))){ chk.checked=false; sel.style.display='none';
+        status('Existing-infrastructure audit data is only available for NPU A & E.'); return; }
+      loadInfraPoints(currentArea, infraMode).then(l=>{ infraLayer=l; l.addTo(map); }).catch(()=>status('Could not load infrastructure layer.'));
+    }
+
+    // ---- walkability segment: real sidewalks ----
+    function surfaceScore(s){ s=(s||'').toLowerCase();
+      if(['paving_stones','concrete','asphalt','paved'].includes(s))return 90;
+      if(['concrete:plates','sett','compacted','fine_gravel'].includes(s))return 70;
+      if(['gravel','unpaved','ground','dirt','grass','earth','sand'].includes(s))return 40;
+      return s?60:65; }
+    async function loadSidewalks(area){
+      const r=await fetch(`../data/cache/${area.id}/sidewalks.geojson`);
+      if(!r.ok) throw new Error('no sidewalks'); const sw=await r.json();
+      const lyr=L.geoJSON(sw,{ renderer:segCanvas, style:f=>({color:safetyColor(surfaceScore(f.properties.surface)),weight:3,opacity:0.85}),
+        onEachFeature:(f,l)=>{ const v=surfaceScore(f.properties.surface);
+          l.bindPopup(`<b>Sidewalk segment</b><br>Walkability: ${v}/100<br>surface: ${f.properties.surface||'unrated'}`); } });
+      status(`${sw.features.length.toLocaleString()} sidewalk segments — click one for its score.`);
+      return lyr;
+    }
+
+    // ---- transit segment: walkshed + stops ----
+    async function loadTransitDetail(area){
+      const r=await fetch(`../data/cache/${area.id}/transit.geojson`);
+      if(!r.ok) throw new Error('no transit'); const data=await r.json();
+      const grp=L.layerGroup();
+      L.geoJSON(data,{filter:f=>f.properties.kind==='walkshed',style:{color:'#1d9e75',weight:0,fillColor:'#1d9e75',fillOpacity:0.14}}).addTo(grp);
+      L.geoJSON(data,{filter:f=>f.properties.kind==='gap',style:{color:'#a32d2d',weight:1.5,dashArray:'4 3',fillColor:'#d85a30',fillOpacity:0.4}}).addTo(grp);
+      function stopMarker(f,ll){ const rail=f.properties.mode==='rail';
+        const icon=L.divIcon({html:rail?'<div class="rail-badge">🚆</div>':'<span style="font-size:12px">🚌</span>',
+          className:'stop-emoji',iconSize:rail?[32,32]:[14,14],iconAnchor:rail?[16,16]:[7,7]});
+        return L.marker(ll,{icon,zIndexOffset:rail?1000:0}).bindPopup(`<b>${f.properties.name}</b><br>MARTA ${f.properties.mode} stop`); }
+      L.geoJSON(data,{filter:f=>f.properties.kind==='stop'&&f.properties.mode==='rail',pointToLayer:stopMarker}).addTo(grp);
+      if(busOn){ const bc=L.markerClusterGroup({maxClusterRadius:50,showCoverageOnHover:false,disableClusteringAtZoom:17,
+          iconCreateFunction:c=>L.divIcon({html:`<div class="bus-cluster">${c.getChildCount()}</div>`,className:'',iconSize:[28,28]})});
+        L.geoJSON(data,{filter:f=>f.properties.kind==='stop'&&f.properties.mode==='bus',pointToLayer:stopMarker}).addTo(bc); bc.addTo(grp); }
+      status('Green wash = within ½-mi walk of MARTA · red = transit gap.');
+      return grp;
+    }
+
+    let allBounds=null;
+    function drawBoundary(area){
+      if(npuLayer) npuLayer.remove();
+      const feat=boundaries.features.find(f=>f.properties.npu===codeOf(area));
+      npuLayer=L.geoJSON(feat,{style:{color:'#1d6fae',weight:2.5,fill:false}}).addTo(map);
+      if(scope==='all'){ if(!allBounds) allBounds=L.geoJSON(boundaries).getBounds();
+        map.fitBounds(allBounds,{padding:[10,10]}); }
+      else map.fitBounds(npuLayer.getBounds(),{padding:[20,20]});
+    }
+
+    // ---- render active lens + detail ----
+    async function renderLens(){
+      status('');
+      if(activeLayer){ activeLayer.remove(); activeLayer=null; }
+      if(!currentArea) return;
+      let loader;
+      const detail = scope==='all' ? 'npu' : activeDetail;   // city view is always NPU-level
+      if(activeLens==='overall')
+        loader = detail==='segment' ? (a=>loadRoads(a,'overall')) : loadOverallNPU;
+      else { const lens=LENSES.find(l=>l.id===activeLens);
+        if(!lens.tiers.length){ status(`${lens.label} data isn't loaded yet — coming soon.`); return; }
+        loader = detail==='segment' && lens.segment ? lens.segment : lens.npu; }
+      try{ activeLayer=await loader(currentArea); activeLayer.addTo(map);
+        if(npuLayer) npuLayer.bringToFront(); }
+      catch(e){ status(`No layer for ${currentArea.name} yet.`); }
+    }
+
+    // ---- sidebar UI ----
+    function updateHeadline(){
+      const sv=currentArea?stat.overall[codeOf(currentArea)]:null;
+      const el=document.getElementById('hl-score');
+      el.innerHTML=`${sv??'—'}<span> /100</span>`;
+      el.style.color=sv==null?'var(--text)':safetyColor(sv);
+      document.getElementById('overall-card').classList.toggle('active',activeLens==='overall');
+    }
+    function lensRow(id,label,icon,v,active,col){
+      const right=`<span class="track"><span class="fill" style="width:${v==null?0:Math.max(2,v)}%;background:${col}"></span></span><span class="val">${v??'–'}</span>`;
+      return `<div class="lens-row ${active?'active':''}" data-lens="${id}"><span class="ic">${icon}</span><span class="lab">${label}</span>${right}</div>`;
+    }
+    function renderLensList(){
+      const code=currentArea?codeOf(currentArea):null;
+      const ov=code!=null?stat.overall[code]:null;
+      // "Overall — all measures" is the first row so you can always click back to the overview
+      let html=lensRow('overall','Overall — all measures','⊕',ov,activeLens==='overall',safetyColor(ov));
+      html+=LENSES.map(l=>{
+        const soon=!l.tiers.length, v=code!=null?l.score(code):null;
+        const col=l.id==='treeshade'?canopyColor(v):safetyColor(v);
+        if(soon) return `<div class="lens-row soon" data-lens="${l.id}"><span class="ic">${l.icon}</span><span class="lab">${l.label}</span><span class="val soon">soon</span></div>`;
+        return lensRow(l.id,l.label,l.icon,v,l.id===activeLens,col);
+      }).join('');
+      document.getElementById('lens-list').innerHTML=html;
+      document.querySelectorAll('.lens-row').forEach(el=>el.addEventListener('click',()=>{
+        const id=el.dataset.lens;
+        if(id!=='overall'){ const lens=LENSES.find(l=>l.id===id); if(!lens.tiers.length) return;
+          if(!lens.tiers.includes(activeDetail)) activeDetail='npu'; }
+        activeLens=id;
+        updateHeadline(); renderLensList(); renderDetail(); renderLens();
+      }));
+    }
+    function renderDetail(){
+      const wrap=document.getElementById('detail-wrap');
+      if(scope==='all'){ wrap.style.display='none'; return; }   // detail is per-NPU
+      const tiers = activeLens==='overall' ? ['npu','segment'] : (LENSES.find(l=>l.id===activeLens)||{}).tiers;
+      if(!tiers || !tiers.length){ wrap.style.display='none'; return; }
+      wrap.style.display='block';
+      document.getElementById('detail-seg').innerHTML=['npu','segment'].map(t=>{
+        const ok=tiers.includes(t);
+        return `<button data-tier="${t}" class="${t===activeDetail?'on':''}" ${ok?'':'disabled'}>${TIER_LABELS[t]}</button>`;
+      }).join('');
+      document.querySelectorAll('#detail-seg button').forEach(b=>b.addEventListener('click',()=>{
+        if(b.disabled) return; activeDetail=b.dataset.tier; renderDetail(); renderLens(); }));
+      const extra=document.getElementById('detail-extra');
+      if(activeLens==='transit'&&activeDetail==='segment'){
+        extra.innerHTML=`<label class="toggle" style="margin-top:8px"><input type="checkbox" id="busChk" ${busOn?'checked':''}/> show bus stops</label>`;
+        document.getElementById('busChk').addEventListener('change',e=>{ busOn=e.target.checked; renderLens(); });
+      } else if(activeDetail==='segment' && ['overall','safety','pedestrian','treeshade'].includes(activeLens)){
+        const lab={overall:'overall priority',safety:'safety',pedestrian:'sidewalks',treeshade:'thermal comfort'}[activeLens];
+        extra.innerHTML=`<p class="hint" style="margin-top:8px">Streets coloured by ${lab}. Switch back to <b>Whole NPU</b> to hide the street lines. Click any street for all its scores.</p>`;
+      } else if(activeDetail==='npu' && tiers.includes('segment')){
+        extra.innerHTML=`<p class="hint" style="margin-top:8px">Showing the whole NPU. Pick <b>Streets</b> to colour each road individually.</p>`;
+      } else extra.innerHTML='';
+    }
+
+    // ---- recommendations (rule-based draft) ----
+    const ACTIONS={
+      safety:{title:'Add lighting & high-visibility crossings on the worst streets',tag:'Safety',col:'#a32d2d'},
+      ped:{title:'Build missing sidewalks on roads without them',tag:'Sidewalks',col:'#6a4ab0'},
+      canopy:{title:'Plant street & large canopy trees on bare corridors',tag:'Thermal comfort',col:'#1d7a3a'},
+      walk:{title:'Fill sidewalk gaps & repair poor surfaces',tag:'Walkability',col:'#9a5b00'},
+      transit:{title:'Add bus shelters & benches near transit gaps',tag:'Transit',col:'#1d6fae'},
+    };
+    function buildRecs(code){
+      const cand=[
+        {k:'safety',v:stat.safety[code]},{k:'ped',v:stat.ped[code]},{k:'canopy',v:stat.canopy[code]},
+        {k:'walk',v:stat.walk[code]},{k:'transit',v:stat.transit[code]},
+      ].filter(x=>x.v!=null).sort((a,b)=>a.v-b.v);
+      return cand.filter(x=>x.v<70);
+    }
+    function renderRecs(){
+      const code=codeOf(currentArea);
+      const recs=buildRecs(code);
+      const fb=reportThemes(code);   // tie resident reports to the matching measure
+      document.getElementById('recs-list').innerHTML = recs.length? recs.map(r=>{
+        const a=ACTIONS[r.k]; const nrep=fb[r.k]||0;
+        return `<div class="rec" style="border-left-color:${a.col}">
+          <div class="top"><span class="ttl">${a.title}</span>
+            <span class="tag" style="background:${a.col}1a;color:${a.col}">${a.tag} ${r.v}</span></div>
+          <div class="why">Scores ${r.v}/100 on ${a.tag.toLowerCase()} — among this NPU's weakest. Target the reddest streets first (Map → ${a.tag} → Streets).${nrep?` <b>${nrep} resident report${nrep>1?'s':''}</b> back this up.`:''}</div>
+        </div>`; }).join('')
+        : `<p class="hint">NPU ${code} scores 70+ on every measure — no priority fixes flagged.</p>`;
+    }
+
+    // ---- plan & cost: intervention catalog (GDOT App. D + federal/municipal guides) ----
+    function money(n){ return '$'+Math.round(n).toLocaleString(); }
+    const CAT_LABEL={Pedestrian:'🚶 Pedestrian Infrastructure',Safety:'🛡️ Safety',
+      'Tree Shade':'🌳 Tree Shade & Comfort',Transit:'🚌 Transit Access',
+      Bicycle:'🚲 Bicycle Infrastructure',Streetscape:'✨ Streetscape'};
+    const COST_CATALOG=[
+      {key:'sidewalk',name:'Sidewalk Construction',cat:'Pedestrian',unit:'mile',cost:352000},
+      {key:'ada_ramp',name:'ADA Ramp',cat:'Pedestrian',unit:'each',cost:1500},
+      {key:'curb_gutter',name:'Curb & Gutter',cat:'Pedestrian',unit:'mile',cost:370000},
+      {key:'signal',name:'Traffic Signal Install/Upgrade',cat:'Safety',unit:'each',cost:125000},
+      {key:'markings',name:'Signing & Pavement Markings',cat:'Safety',unit:'mile',cost:50000},
+      {key:'int_light',name:'Roundabout/Intersection Lighting',cat:'Safety',unit:'each',cost:100000},
+      {key:'raised_median',name:'Raised Median',cat:'Safety',unit:'mile',cost:1308267},
+      {key:'ped_sign',name:'Pedestrian Crossing Sign',cat:'Safety',unit:'each',cost:1250,lo:500,hi:2000},
+      {key:'rrfb',name:'RRFB Beacon',cat:'Safety',unit:'crossing',cost:27500,lo:15000,hi:40000},
+      {key:'hv_crosswalk',name:'High-Visibility Crosswalk',cat:'Safety',unit:'crossing',cost:3000,lo:1000,hi:5000},
+      {key:'raised_crosswalk',name:'Raised Crosswalk',cat:'Safety',unit:'crossing',cost:17500,lo:10000,hi:25000},
+      {key:'median_land',name:'Median Landscaping',cat:'Tree Shade',unit:'mile',cost:100000},
+      {key:'street_tree',name:'Street Tree',cat:'Tree Shade',unit:'each',cost:1375,lo:750,hi:2000},
+      {key:'canopy_tree',name:'Large Canopy Tree',cat:'Tree Shade',unit:'each',cost:3500,lo:2000,hi:5000},
+      {key:'bioswale',name:'Rain Garden / Bioswale',cat:'Tree Shade',unit:'each',cost:27500,lo:5000,hi:50000},
+      {key:'pocket_park',name:'Pocket Park',cat:'Tree Shade',unit:'each',cost:137500,lo:25000,hi:250000},
+      {key:'comm_garden',name:'Community Garden',cat:'Tree Shade',unit:'each',cost:55000,lo:10000,hi:100000},
+      {key:'bus_shelter',name:'Bus Shelter',cat:'Transit',unit:'each',cost:20000,lo:10000,hi:30000},
+      {key:'bench',name:'Bench',cat:'Transit',unit:'each',cost:2750,lo:1500,hi:4000},
+      {key:'bike_lane',name:'Bike Lane',cat:'Bicycle',unit:'mile',cost:553333},
+      {key:'bike_rack',name:'Bike Rack',cat:'Bicycle',unit:'each',cost:1250,lo:500,hi:2000},
+      {key:'trash',name:'Trash Can',cat:'Streetscape',unit:'each',cost:1400,lo:800,hi:2000},
+    ];
+    const catItem=k=>COST_CATALOG.find(i=>i.key===k);
+    let pkg=[];  // [{key, qty}]
+    function initCostPicker(){
+      const order=['Pedestrian','Safety','Tree Shade','Transit','Bicycle','Streetscape'];
+      document.getElementById('cost-pick').innerHTML=order.map(cat=>
+        `<optgroup label="${CAT_LABEL[cat]}">`+COST_CATALOG.filter(i=>i.cat===cat).map(i=>
+          `<option value="${i.key}">${i.name} — ${money(i.cost)}/${i.unit}</option>`).join('')+`</optgroup>`).join('');
+    }
+    function seedPkg(code){
+      const map={safety:'hv_crosswalk',ped:'sidewalk',canopy:'street_tree',walk:'curb_gutter',transit:'bus_shelter'};
+      pkg=buildRecs(code).map(r=>({key:map[r.k],qty:1})).filter(p=>p.key);
+    }
+    function renderCost(){
+      const body=document.getElementById('cost-body');
+      body.innerHTML = pkg.length? pkg.map((p,i)=>{ const it=catItem(p.key);
+        return `<tr data-i="${i}"><td>${it.name}<br><small style="color:var(--muted)">${money(it.cost)}/${it.unit}</small></td>
+          <td><input type="number" min="0" step="0.5" value="${p.qty}"/></td>
+          <td style="text-align:right" class="sub">${money(it.cost*p.qty)}</td>
+          <td><button class="rm" title="remove" style="border:0;background:none;cursor:pointer;color:#a32d2d">✕</button></td></tr>`; }).join('')
+        : `<tr><td colspan="4" style="color:var(--muted)">Add interventions from the menu above.</td></tr>`;
+      body.querySelectorAll('tr[data-i]').forEach(tr=>{ const i=+tr.dataset.i;
+        tr.querySelector('input').addEventListener('input',e=>{ pkg[i].qty=+e.target.value||0; recalcCost(); });
+        tr.querySelector('.rm').addEventListener('click',()=>{ pkg.splice(i,1); renderCost(); }); });
+      recalcCost();
+    }
+    function recalcCost(){
+      let total=0;
+      document.querySelectorAll('#cost-body tr[data-i]').forEach(tr=>{ const p=pkg[+tr.dataset.i]; const it=catItem(p.key);
+        const sub=it.cost*(p.qty||0); tr.querySelector('.sub').textContent=money(sub); total+=sub; });
+      document.getElementById('cost-total').textContent=money(total);
+    }
+
+    // ---- resident feedback ----
+    let CATMAP={}, DIMS={}, curReports=[], reportsLayer=null, currentTab='map';
+    const SEV_COL={high:'#a32d2d',medium:'#9a5b00',low:'#3b6d11'};
+    const MET_KEY={walk_score:'ped',safety:'safety',transit_score:'transit',heat_risk:'canopy'};
+    async function loadCategories(){ try{ const c=await(await fetch('../data/report_categories.json')).json();
+      c.categories.forEach(x=>CATMAP[x.id]=x); c.groups.forEach(g=>DIMS[g.dimension]=g); }catch(e){} }
+    async function loadReportsFor(area){
+      try{ const r=await fetch(`/api/reports?npu=${codeOf(area)}`); curReports=(await r.json()).features||[]; }
+      catch(e){ curReports=[]; }
+      renderFeedback(); renderRecs(); if(currentTab==='feedback') showReportPins();
+    }
+    function reportThemes(){ const t={}; curReports.forEach(f=>{ const k=MET_KEY[f.properties.index_metric]; if(k) t[k]=(t[k]||0)+1; }); return t; }
+    function relDate(iso){ try{ return new Date(iso).toLocaleDateString(undefined,{month:'short',day:'numeric'}); }catch(e){ return ''; } }
+    function renderFeedback(){
+      if(!currentArea) return;
+      const reps=curReports, sumEl=document.getElementById('feedback-summary'), listEl=document.getElementById('feedback-list');
+      if(!reps.length){ sumEl.innerHTML=`<div class="fb-sum"><div class="big">No resident reports yet</div>
+        <div class="syn">Nothing submitted for ${currentArea.name}. Reports from the <a href="resident.html">resident view</a> appear here automatically.</div></div>`;
+        listEl.innerHTML=''; return; }
+      const byDim={}; reps.forEach(f=>{ const d=(CATMAP[f.properties.category]||{}).dimension||'Other'; byDim[d]=(byDim[d]||0)+1; });
+      const dims=Object.entries(byDim).sort((a,b)=>b[1]-a[1]); const maxd=Math.max(...dims.map(d=>d[1]));
+      const sev={high:0,medium:0,low:0}; reps.forEach(f=>sev[f.properties.severity]=(sev[f.properties.severity]||0)+1);
+      const bars=dims.map(([d,n])=>{ const g=DIMS[d]||{};
+        return `<div class="fb-theme"><span class="nm">${g.icon||''} ${d}</span><span class="track"><span class="fill" style="width:${Math.round(100*n/maxd)}%;background:${g.color||'#3b6d8c'}"></span></span><span class="n">${n}</span></div>`; }).join('');
+      const themes=reportThemes(); const gaps=[];
+      const gc={safety:['Safety',stat.safety[codeOf(currentArea)]],ped:['Sidewalks',stat.ped[codeOf(currentArea)]],transit:['Transit',stat.transit[codeOf(currentArea)]]};
+      for(const k in gc){ const [lab,sc]=gc[k]; if(sc!=null && sc>=60 && (themes[k]||0)>=2) gaps.push(`${lab} scores ${sc}/100 but ${themes[k]} residents report problems`); }
+      const gapHtml=gaps.length?`<div class="gapflag"><b>⚠ Perception gap:</b> ${gaps.join('; ')} — looks fine on paper, but people don't feel it.</div>`:'';
+      sumEl.innerHTML=`<div class="fb-sum">
+        <div class="big">${reps.length} resident report${reps.length>1?'s':''} · ${currentArea.name}</div>
+        <div class="syn">Top concern: <b>${dims[0][0]}</b> (${dims[0][1]}). ${sev.high} high-severity · ${sev.medium} medium · ${sev.low} low.</div>
+        ${bars}${gapHtml}</div>`;
+      const sorted=reps.slice().sort((a,b)=>(b.properties.created_at||'').localeCompare(a.properties.created_at||''));
+      listEl.innerHTML=sorted.map(f=>{ const p=f.properties, c=CATMAP[p.category]||{label:p.category,icon:'•'}, col=(DIMS[c.dimension]||{}).color||'#888';
+        return `<div class="rep" style="border-left-color:${col}">
+          <div class="hd"><span class="cat">${c.icon||''} ${c.label||p.category}</span>
+            <span class="sev" style="background:${SEV_COL[p.severity]}1a;color:${SEV_COL[p.severity]}">${p.severity}</span></div>
+          ${p.text?`<div class="txt">"${p.text}"</div>`:''}
+          <div class="meta">${p.user_type||'resident'} · ${(p.time_context||'').replace('_',' ')} · ${relDate(p.created_at)}</div></div>`; }).join('');
+    }
+    function showReportPins(){
+      hideReportPins();
+      if(!curReports.length) return;
+      reportsLayer=L.layerGroup();
+      curReports.forEach(f=>{ const p=f.properties, c=CATMAP[p.category]||{icon:'•',label:p.category}, col=SEV_COL[p.severity]||'#888';
+        const icon=L.divIcon({className:'',html:`<div class="rep-pin" style="background:${col}"><span>${c.icon||'•'}</span></div>`,iconSize:[24,24],iconAnchor:[12,22]});
+        const g=f.geometry.coordinates;
+        L.marker([g[1],g[0]],{icon}).bindPopup(`<b>${c.icon||''} ${c.label||p.category}</b>`
+          +`<br><span style="color:${col};font-weight:600;text-transform:uppercase;font-size:11px">${p.severity}</span>`
+          +`${p.text?`<br>"${p.text}"`:''}<br><small style="color:#999">${p.user_type||'resident'} · ${(p.time_context||'').replace('_',' ')}</small>`).addTo(reportsLayer); });
+      reportsLayer.addTo(map);
+    }
+    function hideReportPins(){ if(reportsLayer){ reportsLayer.remove(); reportsLayer=null; } }
+
+    // ---- map scope (selected NPU vs all Atlanta) ----
+    function setScope(s){
+      scope=s;
+      document.querySelectorAll('#scope-seg button').forEach(b=>b.classList.toggle('on',b.dataset.scope===s));
+      if(s==='all') activeDetail='npu';
+      renderDetail(); drawBoundary(currentArea); renderLens();
+    }
+
+    // ---- tab switching ----
+    function setTab(tab){
+      currentTab=tab;
+      document.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('on',b.dataset.tab===tab));
+      document.getElementById('panel-map').classList.toggle('on',tab==='map');
+      document.getElementById('panel-feedback').classList.toggle('on',tab==='feedback');
+      document.getElementById('panel-plan').classList.toggle('on',tab==='plan');
+      if(tab==='feedback') showReportPins(); else hideReportPins();
+    }
+
+    function select(area){
+      currentArea=area;
+      activeDetail='npu';     // start clean (no street lines) when changing NPU
+      document.getElementById('hl-area').textContent=area.name;
+      updateHeadline(); drawBoundary(area);
+      renderLensList(); renderDetail(); renderLens(); refreshInfra(); refreshBike();
+      renderRecs(); seedPkg(codeOf(area)); renderCost();
+      loadReportsFor(area);   // async: fills Feedback + report-backed recs + pins
+    }
+
+    async function init(){
+      areas=await(await fetch('../data/areas.json')).json();
+      boundaries=await(await fetch('../data/boundaries/atlanta_npus.geojson')).json();
+      await loadIndexStats();
+      await loadCategories();
+      const sel=document.getElementById('area');
+      areas.forEach((a,i)=>{ const o=document.createElement('option'); o.value=i; o.textContent=a.name; sel.appendChild(o); });
+      sel.addEventListener('change',()=>select(areas[sel.value]));
+      document.getElementById('overall-card').addEventListener('click',()=>{
+        activeLens='overall'; updateHeadline(); renderLensList(); renderDetail(); renderLens(); });
+      document.querySelectorAll('.tabs button').forEach(b=>b.addEventListener('click',()=>setTab(b.dataset.tab)));
+      document.querySelectorAll('#scope-seg button').forEach(b=>b.addEventListener('click',()=>setScope(b.dataset.scope)));
+      initCostPicker();
+      document.getElementById('cost-add').addEventListener('click',()=>{
+        pkg.push({key:document.getElementById('cost-pick').value, qty:1}); renderCost(); });
+      document.getElementById('infraChk').addEventListener('change',refreshInfra);
+      document.getElementById('infraType').addEventListener('change',e=>{ infraMode=e.target.value; refreshInfra(); });
+      document.getElementById('bikeChk').addEventListener('change',refreshBike);
+      const startIdx=Math.max(0,areas.findIndex(a=>a.id==='npu-e'));
+      sel.value=startIdx; select(areas[startIdx]);
+    }
+    init();
+  </script>
+</body>
+</html>

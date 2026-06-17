@@ -1,0 +1,252 @@
+[
+  {
+    "id": "npu-a",
+    "name": "NPU A",
+    "center": [
+      33.85565,
+      -84.42167
+    ],
+    "zoom": 14,
+    "note": "12,465 residents \u00b7 11.43 sq mi"
+  },
+  {
+    "id": "npu-b",
+    "name": "NPU B",
+    "center": [
+      33.84727,
+      -84.37255
+    ],
+    "zoom": 14,
+    "note": "65,801 residents \u00b7 10.18 sq mi"
+  },
+  {
+    "id": "npu-c",
+    "name": "NPU C",
+    "center": [
+      33.824,
+      -84.4232
+    ],
+    "zoom": 14,
+    "note": "22,409 residents \u00b7 6.05 sq mi"
+  },
+  {
+    "id": "npu-d",
+    "name": "NPU D",
+    "center": [
+      33.80627,
+      -84.44841
+    ],
+    "zoom": 14,
+    "note": "17,182 residents \u00b7 6.49 sq mi"
+  },
+  {
+    "id": "npu-e",
+    "name": "NPU E",
+    "center": [
+      33.79416,
+      -84.39178
+    ],
+    "zoom": 14,
+    "note": "61,864 residents \u00b7 5.91 sq mi"
+  },
+  {
+    "id": "npu-f",
+    "name": "NPU F",
+    "center": [
+      33.79931,
+      -84.34216
+    ],
+    "zoom": 14,
+    "note": "34,410 residents \u00b7 6.0 sq mi"
+  },
+  {
+    "id": "npu-g",
+    "name": "NPU G",
+    "center": [
+      33.79471,
+      -84.47004
+    ],
+    "zoom": 14,
+    "note": "11,191 residents \u00b7 5.62 sq mi"
+  },
+  {
+    "id": "npu-h",
+    "name": "NPU H",
+    "center": [
+      33.76142,
+      -84.5165
+    ],
+    "zoom": 14,
+    "note": "15,412 residents \u00b7 6.39 sq mi"
+  },
+  {
+    "id": "npu-i",
+    "name": "NPU I",
+    "center": [
+      33.74941,
+      -84.47136
+    ],
+    "zoom": 14,
+    "note": "20,605 residents \u00b7 9.59 sq mi"
+  },
+  {
+    "id": "npu-j",
+    "name": "NPU J",
+    "center": [
+      33.76888,
+      -84.45074
+    ],
+    "zoom": 14,
+    "note": "11,132 residents \u00b7 4.44 sq mi"
+  },
+  {
+    "id": "npu-k",
+    "name": "NPU K",
+    "center": [
+      33.76713,
+      -84.43086
+    ],
+    "zoom": 14,
+    "note": "10,998 residents \u00b7 2.39 sq mi"
+  },
+  {
+    "id": "npu-l",
+    "name": "NPU L",
+    "center": [
+      33.76928,
+      -84.4089
+    ],
+    "zoom": 14,
+    "note": "7,359 residents \u00b7 1.32 sq mi"
+  },
+  {
+    "id": "npu-m",
+    "name": "NPU M",
+    "center": [
+      33.75827,
+      -84.38309
+    ],
+    "zoom": 14,
+    "note": "39,261 residents \u00b7 3.78 sq mi"
+  },
+  {
+    "id": "npu-n",
+    "name": "NPU N",
+    "center": [
+      33.76136,
+      -84.34359
+    ],
+    "zoom": 14,
+    "note": "23,908 residents \u00b7 3.44 sq mi"
+  },
+  {
+    "id": "npu-o",
+    "name": "NPU O",
+    "center": [
+      33.7508,
+      -84.31942
+    ],
+    "zoom": 14,
+    "note": "18,592 residents \u00b7 3.89 sq mi"
+  },
+  {
+    "id": "npu-p",
+    "name": "NPU P",
+    "center": [
+      33.68853,
+      -84.5225
+    ],
+    "zoom": 14,
+    "note": "18,563 residents \u00b7 9.39 sq mi"
+  },
+  {
+    "id": "npu-q",
+    "name": "NPU Q",
+    "center": [
+      33.72221,
+      -84.53386
+    ],
+    "zoom": 14,
+    "note": "1,701 residents \u00b7 1.67 sq mi"
+  },
+  {
+    "id": "npu-r",
+    "name": "NPU R",
+    "center": [
+      33.69432,
+      -84.47211
+    ],
+    "zoom": 14,
+    "note": "18,550 residents \u00b7 5.39 sq mi"
+  },
+  {
+    "id": "npu-s",
+    "name": "NPU S",
+    "center": [
+      33.71688,
+      -84.43864
+    ],
+    "zoom": 14,
+    "note": "9,536 residents \u00b7 3.88 sq mi"
+  },
+  {
+    "id": "npu-t",
+    "name": "NPU T",
+    "center": [
+      33.74139,
+      -84.42515
+    ],
+    "zoom": 14,
+    "note": "15,549 residents \u00b7 2.74 sq mi"
+  },
+  {
+    "id": "npu-v",
+    "name": "NPU V",
+    "center": [
+      33.73381,
+      -84.39762
+    ],
+    "zoom": 14,
+    "note": "17,531 residents \u00b7 3.17 sq mi"
+  },
+  {
+    "id": "npu-w",
+    "name": "NPU W",
+    "center": [
+      33.72895,
+      -84.35113
+    ],
+    "zoom": 14,
+    "note": "26,892 residents \u00b7 5.45 sq mi"
+  },
+  {
+    "id": "npu-x",
+    "name": "NPU X",
+    "center": [
+      33.6865,
+      -84.4131
+    ],
+    "zoom": 14,
+    "note": "12,399 residents \u00b7 4.36 sq mi"
+  },
+  {
+    "id": "npu-y",
+    "name": "NPU Y",
+    "center": [
+      33.71162,
+      -84.38278
+    ],
+    "zoom": 14,
+    "note": "12,580 residents \u00b7 3.29 sq mi"
+  },
+  {
+    "id": "npu-z",
+    "name": "NPU Z",
+    "center": [
+      33.67889,
+      -84.37723
+    ],
+    "zoom": 14,
+    "note": "19,254 residents \u00b7 10.48 sq mi"
+  }
+]
