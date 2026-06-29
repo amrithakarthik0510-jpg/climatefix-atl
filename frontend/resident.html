@@ -121,7 +121,7 @@
     .npu-screen .np-step b { color:#ffffff; }
     .npu-screen .np-step .d { color:#9aa3b2; }
     .npu-screen .np-select { background:#1a1d27; color:#eef0f5; border:1px solid #2b2f3a; }
-    .npu-screen .np-select option { color:#1d1a17; }
+    .npu-screen .np-select option { background:#ffffff; color:#1d1a17; }
     .npu-screen .btn-line { background:#15171b; color:var(--cyan); border-color:var(--cyan); }
 
     /* ---------- APP (map + report) ---------- */
@@ -131,7 +131,7 @@
     .npu-pick { margin-left:auto; }
     .npu-pick select { background:#1b1f2a; color:var(--text); border:1px solid var(--line);
                        border-radius:20px; padding:7px 12px; font-size:13px; font-family:inherit; }
-    .npu-pick select option { color:#1d1a17; }
+    .npu-pick select option { background:#ffffff; color:#1d1a17; }
     .sheet { position:absolute; left:0; right:0; bottom:0; z-index:1000; background:#13161e;
              border-top:1px solid #262b36;
              border-top-left-radius:24px; border-top-right-radius:24px; padding:8px 18px 24px;
@@ -158,7 +158,7 @@
     .chip.on { background:var(--cyan); color:#062a2a; border-color:var(--cyan); font-weight:700; }
     select.in, textarea.in { width:100%; background:#1b1f2a; color:var(--text); border:1px solid var(--line);
             border-radius:12px; padding:12px; font-size:14.5px; font-family:inherit; }
-    select.in option { color:#1d1a17; }
+    select.in option { background:#ffffff; color:#1d1a17; }
     textarea.in { min-height:60px; resize:vertical; }
     .picked { display:flex; align-items:center; gap:10px; background:var(--panel2); border:1px solid var(--line);
               border-radius:14px; padding:12px; margin-bottom:4px; }
@@ -362,26 +362,37 @@
       document.getElementById('pin-sub').textContent='📍 Pin set — drag to adjust, or tap a new spot.';
       const n=document.getElementById('pin-next'); n.disabled=false; n.style.opacity=1;
     });
+    // demo fallback so the hosted (static / GitHub Pages) build works without server.py
+    function loadLocalReports(){ try{ return JSON.parse(localStorage.getItem('wia_reports')||'[]'); }catch(_){ return []; } }
+    function saveLocalReport(b){ const a=loadLocalReports(); a.push(b); try{ localStorage.setItem('wia_reports',JSON.stringify(a)); }catch(_){} }
     window.submitReport=async function(){
       const ll=pin.getLatLng();
       const body={lat:ll.lat,lng:ll.lng,npu:current.name.split(' ').pop(),category:chosen.category.id,
         severity:chosen.severity,time_context:document.getElementById('time_context').value,
         user_type:document.getElementById('user_type').value,text:document.getElementById('text').value};
+      let saved=false;
       try{
         const r=await fetch('/api/report',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
-        if(!r.ok)throw 0;
-        document.getElementById('done-msg').textContent=`“${chosen.category.label}” saved for ${current.name}.`;
-        if(pin){pin.remove();pin=null;} document.getElementById('text').value=''; loadReports(current); go('done');
-      }catch(_){ alert('Could not save. Start the server:\n\npython3 scripts/server.py'); }
+        if(r.ok) saved=true;
+      }catch(_){}
+      if(!saved) saveLocalReport(body);   // no backend (e.g. GitHub Pages) — keep it in the browser
+      document.getElementById('done-msg').textContent = saved
+        ? `“${chosen.category.label}” saved for ${current.name}.`
+        : `“${chosen.category.label}” added for ${current.name} — saved in this browser (demo).`;
+      if(pin){pin.remove();pin=null;} document.getElementById('text').value=''; loadReports(current); go('done');
     };
     async function loadReports(area){
       if(reportLayer)reportLayer.remove();
+      const code=area.name.split(' ').pop();
+      let feats=[];
       try{
-        const code=area.name.split(' ').pop();
         const data=await (await fetch(`/api/reports?npu=${code}`)).json();
-        reportLayer=L.geoJSON(data,{pointToLayer:(f,ll)=>L.circleMarker(ll,{radius:6,color:'#2ec5c5',fillColor:'#2ec5c5',fillOpacity:.9,weight:1})
-          .bindPopup(`<b>${(cats.categories.find(c=>c.id===f.properties.category)||{}).label||f.properties.category}</b><br>${f.properties.text||''}`)}).addTo(map);
+        if(data&&data.features) feats=data.features;
       }catch(_){}
+      loadLocalReports().filter(b=>b.npu===code).forEach(b=>feats.push({type:'Feature',
+        geometry:{type:'Point',coordinates:[b.lng,b.lat]},properties:{category:b.category,text:b.text}}));
+      reportLayer=L.geoJSON({type:'FeatureCollection',features:feats},{pointToLayer:(f,ll)=>L.circleMarker(ll,{radius:6,color:'#2ec5c5',fillColor:'#2ec5c5',fillOpacity:.9,weight:1})
+        .bindPopup(`<b>${(cats.categories.find(c=>c.id===f.properties.category)||{}).label||f.properties.category}</b><br>${f.properties.text||''}`)}).addTo(map);
     }
 
     function drawLanding(){
