@@ -198,6 +198,7 @@
   <script>
     const map = L.map('map');
     const segCanvas = L.canvas({padding:0.5, tolerance:14});
+    map.createPane('infraPane'); map.getPane('infraPane').style.zIndex=460;
     L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
       attribution:'&copy; OpenStreetMap &copy; CARTO', maxZoom:20 }).addTo(map);
 
@@ -331,7 +332,7 @@
     }
 
     // ---- existing infrastructure: per-point audit overlay (NPU A & E only) ----
-    const infraCanvas=L.canvas({padding:0.5, tolerance:14});
+    const infraCanvas=L.canvas({padding:0.5, tolerance:14, pane:'infraPane'});
     const infraCache={};
     let infraMode='surface';
     function surfaceColor(s){ s=(s||'').toLowerCase();

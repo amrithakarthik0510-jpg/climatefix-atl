@@ -16,13 +16,20 @@ directly will NOT work.
 # 1. from the project folder, start a tiny web server:
 cd climatefix-atl
 python3 -m http.server 8000
-
-# 2. open this in your browser (leave the server running):
-#    http://localhost:8000/frontend/index.html
 ```
 
-Pick an NPU from the dropdown — its boundary draws and the map zooms to it.
-The sidebar shows population + area, and a slot where walkability layers appear.
+Then, **leaving the server running**, open any of these pages in your browser
+(use the `localhost` URL — NOT a `file://` path, which won't load the data):
+
+| Page | URL |
+|---|---|
+| Map + NPU dropdown (step 1) | http://localhost:8000/frontend/index.html |
+| Resident report mode | http://localhost:8000/frontend/resident.html |
+| Planner / scenario mode | http://localhost:8000/frontend/planner.html |
+
+On the map page, pick an NPU from the dropdown — its boundary draws and the map
+zooms to it. The sidebar shows population + area, and a slot where walkability
+layers appear.
 
 ## Add walkability layers (teammates, later — needs internet)
 
@@ -48,6 +55,8 @@ scripts/
   make_sample_data.py            # stub pipeline -> writes cache/<id>/segments.geojson
 frontend/
   index.html                     # Leaflet map + dropdown (step 1)
+  resident.html                  # resident report mode
+  planner.html                   # planner / scenario mode
 ```
 
 ## How a neighborhood is added
